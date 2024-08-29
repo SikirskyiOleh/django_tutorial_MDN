@@ -1,5 +1,5 @@
 [flake8]
-extend-ignore = F401
+extend-ignore = F401, A003
 exclude =
     .git,
     __pycache__,
@@ -7,5 +7,6 @@ exclude =
     old,
     build,
     dist,
-    .venv
+    .venv,
+     catalog/migrations
 max-line-length = 120
