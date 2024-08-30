@@ -12,12 +12,10 @@ class AuthorAdmin(admin.ModelAdmin):
     fields = ['first_name', 'last_name', ('date_of_birth', 'date_of_death')]
 
 
-
 admin.site.register(Author, AuthorAdmin)
 
 
 class BooksInstanceInline(admin.TabularInline):
-
     extra = 0
     model = BookInstance
 
