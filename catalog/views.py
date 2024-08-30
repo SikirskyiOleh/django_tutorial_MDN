@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.views import generic
 
 from .models import Author, Book, BookInstance, Genre, Language
 
@@ -19,7 +20,7 @@ def index(request):
     # Number of genres that contain a particular word (case insensitive)
     num_spec_genres = Genre.objects.filter(name__icontains='Fantacy').count()
 
-    # Number of books that contain a particular word (case insensitive)
+    # Number of catalog that contain a particular word (case insensitive)
     num_spec_books = Book.objects.filter(title__icontains='The').count()
 
     context = {
@@ -33,3 +34,45 @@ def index(request):
 
     # Render the HTML template index.html with the date in the context variable
     return render(request, 'index.html', context=context)
+
+
+class BookListView(generic.ListView):
+    model = Book
+    context_object_name = 'book_list'
+    # queryset = Book.objects.filter(title__icontains='The')[:5]
+    template_name = 'catalog/book_list.html'
+    paginate_by = 10
+
+    def get_queryset(self):
+        # return Book.objects.filter(title__icontains='The')[:5]
+        return Book.objects.all()
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get the context
+        context = super(BookListView, self).get_context_data(**kwargs)
+        # Create any data and add it to the context
+        context['some_data'] = 'This is just some data'
+        return context
+
+
+class BookDetailView(generic.DetailView):
+    model = Book
+
+
+class AuthorListView(generic.ListView):
+    model = Author
+    context_object_name = 'author_list'
+    template_name = 'catalog/author_list.html'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Author.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super(AuthorListView, self).get_context_data(**kwargs)
+        context['some_date'] = 'This is just some date'
+        return context
+
+
+class AuthorDetailView(generic.DetailView):
+    model = Author
