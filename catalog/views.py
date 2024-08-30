@@ -23,6 +23,11 @@ def index(request):
     # Number of catalog that contain a particular word (case insensitive)
     num_spec_books = Book.objects.filter(title__icontains='The').count()
 
+    # Number of visits to this view, as counted in the session variable.
+    num_visits = request.session.get('num_visits', 0)
+    num_visits += 1
+    request.session['num_visits'] = num_visits
+
     context = {
         'num_books': num_books,
         'num_instances': num_instances,
@@ -30,6 +35,7 @@ def index(request):
         'num_authors': num_authors,
         'num_spec_genres': num_spec_genres,
         'num_spec_books': num_spec_books,
+        'num_visits': num_visits,
     }
 
     # Render the HTML template index.html with the date in the context variable
